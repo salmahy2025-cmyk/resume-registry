@@ -2,35 +2,18 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>  <!-- Updated dynamically after login -->
+    <title>Login</title>
 </head>
 <body>
 
-<a href="#">Please log in</a>  <!-- Anchor tag with exact text -->
-
 <h2>Login</h2>
 
-<form method="post" id="loginForm">
+<form method="post" id="loginForm" action="login.php">
     Email: <input type="email" name="email" required><br><br>
     Password: <input type="password" name="pass" required><br><br>
     <button type="submit">Log In</button>
 </form>
 
-<hr>
-
-<h2>Add Resume</h2>
-
-<form id="resumeForm">
-    Name: <input type="text" id="name"><br><br>
-    Email: <input type="text" id="email"><br><br>
-    Title: <input type="text" id="title"><br><br>
-    <button type="submit">Add</button>
-</form>
-
-<h2>Resumes</h2>
-<ul id="resumeList"></ul>
-
 <script src="app.js"></script>
-
 </body>
 </html>
