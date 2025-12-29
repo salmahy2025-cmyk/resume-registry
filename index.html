@@ -2,15 +2,17 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>  <!-- Will be updated dynamically after login -->
+    <title>Login</title>  <!-- Updated dynamically after login -->
 </head>
 <body>
 
-<a href="#">Please log in</a>  <!-- Added anchor tag with exact text -->
+<a href="#">Please log in</a>  <!-- Anchor tag with exact text -->
 
 <h2>Login</h2>
 
-<form method="post">
+<form method="post" id="loginForm">
+    Email: <input type="email" name="email" required><br><br>
+    Password: <input type="password" name="pass" required><br><br>
     <button type="submit">Log In</button>
 </form>
 
