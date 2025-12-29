@@ -6,7 +6,7 @@ require_once "util.php";
 <!DOCTYPE html>
 <html>
 <head>
-<title>Liste des profils - TonNom</title>
+<title>Liste des profils - '79f3577a</title>
 </head>
 <body>
 <h1>Liste des profils</h1>
