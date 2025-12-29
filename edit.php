@@ -1,4 +1,14 @@
 <?php
+<script src="app.js"></script>
+<form method="post">
+First Name: <input type="text" name="first_name" id="id_first_name" value="<?= htmlentities($row['first_name'] ?? '') ?>"><br>
+Last Name: <input type="text" name="last_name" id="id_last_name" value="<?= htmlentities($row['last_name'] ?? '') ?>"><br>
+Email: <input type="text" name="email" id="id_email" value="<?= htmlentities($row['email'] ?? '') ?>"><br>
+Headline: <input type="text" name="headline" id="id_headline" value="<?= htmlentities($row['headline'] ?? '') ?>"><br>
+Summary:<br><textarea name="summary" id="id_summary" rows="8" cols="80"><?= htmlentities($row['summary'] ?? '') ?></textarea><br>
+<input type="submit" value="Submit" onclick="return validateProfile();">
+</form>
+
 require_once "pdo.php";
 require_once "util.php";
 checkLoggedIn();
