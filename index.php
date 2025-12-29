@@ -1,70 +1,84 @@
 <?php
 session_start();
-require_once "pdo.php"; // fichier avec la connexion PDO
+require_once "pdo.php";
 
-// Flash message
-if ( isset($_SESSION['success']) ) {
-    echo('<p style="color: green;">'.htmlentities($_SESSION['success'])."</p>\n");
-    unset($_SESSION['success']);
-}
-if ( isset($_SESSION['error']) ) {
-    echo('<p style="color: red;">'.htmlentities($_SESSION['error'])."</p>\n");
-    unset($_SESSION['error']);
-}
+// Récupération de tous les profils avec les noms des utilisateurs
+$stmt = $pdo->query("
+    SELECT Profile.profile_id, Profile.first_name, Profile.last_name, 
+           Profile.headline, users.name as user_name, Profile.user_id
+    FROM Profile 
+    JOIN users ON Profile.user_id = users.user_id
+    ORDER BY Profile.profile_id
+");
+$profiles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>79f3577a - Resume Registry</title> <!-- mettre votre nom ou identifiant -->
+    <title>Gestion de Profils - Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Resume Registry</h1>
-
-<?php
-if ( ! isset($_SESSION['name']) ) {
-    // Si pas connecté
-    echo '<p><a href="login.php">Please log in</a></p>';
-} else {
-    // Si connecté
-    echo '<p><a href="logout.php">Logout</a></p>';
-    echo '<p><a href="add.php">Add New Entry</a></p>';
-}
-
-// Récupérer tous les profils
-$stmt = $pdo->query("SELECT profile_id, user_id, first_name, last_name, headline FROM Profile");
-$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-if ( count($rows) > 0 ) {
-    echo('<table border="1">'."\n");
-    echo "<tr><th>Name</th><th>Headline</th>";
-    if(isset($_SESSION['user_id'])) echo "<th>Action</th>";
-    echo "</tr>\n";
-
-    foreach ( $rows as $row ) {
-        echo "<tr><td>";
-        echo '<a href="view.php?profile_id='.htmlentities($row['profile_id']).'">';
-        echo htmlentities($row['first_name'].' '.$row['last_name']);
-        echo "</a></td><td>";
-        echo htmlentities($row['headline']);
-        echo "</td>";
-
-        // Si connecté et propriétaire, montrer Edit/Delete
-        if(isset($_SESSION['user_id'])){
-            echo "<td>";
-            if($_SESSION['user_id'] == $row['user_id']){
-                echo '<a href="edit.php?profile_id='.htmlentities($row['profile_id']).'">Edit</a> / ';
-                echo '<a href="delete.php?profile_id='.htmlentities($row['profile_id']).'">Delete</a>';
-            }
-            echo "</td>";
-        }
-
-        echo "</tr>\n";
+<div class="container">
+    <h1>Base de données de Profils</h1>
+    
+    <?php
+    // Affichage des messages flash
+    if (isset($_SESSION['success'])) {
+        echo '<p style="color:green">' . htmlentities($_SESSION['success']) . "</p>\n";
+        unset($_SESSION['success']);
     }
-    echo "</table>\n";
-} else {
-    echo "<p>No profiles found</p>";
-}
-?>
-
+    if (isset($_SESSION['error'])) {
+        echo '<p style="color:red">' . htmlentities($_SESSION['error']) . "</p>\n";
+        unset($_SESSION['error']);
+    }
+    ?>
+    
+    <?php if (!isset($_SESSION['name'])): ?>
+        <p><a href="login.php">Veuillez vous connecter</a></p>
+    <?php else: ?>
+        <p>Bienvenue, <?= htmlentities($_SESSION['name']) ?></p>
+        <p><a href="add.php">Ajouter un nouveau profil</a> | <a href="logout.php">Déconnexion</a></p>
+    <?php endif; ?>
+    
+    <h2>Liste des Profils</h2>
+    <?php if (count($profiles) > 0): ?>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Titre</th>
+                    <th>Propriétaire</th>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <th>Actions</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($profiles as $profile): ?>
+                    <tr>
+                        <td>
+                            <a href="view.php?profile_id=<?= $profile['profile_id'] ?>">
+                                <?= htmlentities($profile['first_name'] . ' ' . $profile['last_name']) ?>
+                            </a>
+                        </td>
+                        <td><?= htmlentities($profile['headline']) ?></td>
+                        <td><?= htmlentities($profile['user_name']) ?></td>
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <td>
+                                <?php if ($_SESSION['user_id'] == $profile['user_id']): ?>
+                                    <a href="edit.php?profile_id=<?= $profile['profile_id'] ?>">Modifier</a> |
+                                    <a href="delete.php?profile_id=<?= $profile['profile_id'] ?>">Supprimer</a>
+                                <?php endif; ?>
+                            </td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>Aucun profil trouvé</p>
+    <?php endif; ?>
+</div>
 </body>
 </html>
