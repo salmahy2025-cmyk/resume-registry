@@ -1,6 +1,6 @@
-<?php
-session_start();
-unset($_SESSION['name']);
-unset($_SESSION['user_id']);
-header('Location: index.php');
-exit();
+<script src="app.js"></script>
+<form method="post">
+Email: <input type="text" name="email" id="id_email"><br>
+Password: <input type="password" name="pass" id="id_pass"><br>
+<input type="submit" onclick="return validateLogin();" value="Log In">
+</form>
