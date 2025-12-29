@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     const resumeForm = document.getElementById('resumeForm');
     const resumeList = document.getElementById('resumeList');
-    const loginForm = document.querySelector('form[method="post"]');  // The login form
+    const loginForm = document.querySelector('form[method="post"]');
 
     // Dummy login handler
     loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();  // Prevent actual form submission
-        alert('Logged in successfully!');  // Dummy action
+        e.preventDefault();
+        alert('Logged in successfully!');
+
+        // Update title tag dynamically (include name or '79f3577a')
+        const name = document.getElementById('name').value.trim() || '79f3577a';  // Use name from form or fallback
+        document.title = `Login - ${name}`;
     });
 
     // Load resumes from localStorage on page load
@@ -35,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Create resume object
-        const resume = { name, email, title, id: Date.now() };  // Use timestamp as ID
+        const resume = { name, email, title, id: Date.now() };
 
         // Save to localStorage
         const resumes = JSON.parse(localStorage.getItem('resumes')) || [];
