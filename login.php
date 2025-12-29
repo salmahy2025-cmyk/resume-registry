@@ -1,13 +1,4 @@
-<?php
-$email = $_POST['email'] ?? '';
-$pass  = $_POST['pass'] ?? '';
-
-if ($email === 'umsi@umich.edu' && $pass === 'php123') {
-    // rediriger vers add.php après login réussi
-    header('Location: add.php');
-    exit();
-} else {
-    echo "<p>Invalid credentials!</p>";
-    echo '<a href="index.php">Back to login</a>';
-}
-?>
+$_SESSION['name'] = $row['name'];
+$_SESSION['user_id'] = $row['user_id'];
+header("Location: index.php");
+exit();
